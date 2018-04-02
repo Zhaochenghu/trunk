@@ -3,15 +3,25 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/compileInject/annotations/annotations.iml" filepath="$PROJECT_DIR$/compileInject/annotations/annotations.iml" />
+      <module fileurl="file://E:\trunk\compileInject\annotations\annotations.iml" filepath="E:\trunk\compileInject\annotations\annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\trunk\app\app.iml" filepath="E:\trunk\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseframe/baseframe.iml" filepath="$PROJECT_DIR$/baseframe/baseframe.iml" />
+      <module fileurl="file://E:\trunk\baseframe\baseframe.iml" filepath="E:\trunk\baseframe\baseframe.iml" />
       <module fileurl="file://$PROJECT_DIR$/compileInject/compiler/compiler.iml" filepath="$PROJECT_DIR$/compileInject/compiler/compiler.iml" />
+      <module fileurl="file://E:\trunk\compileInject\compiler\compiler.iml" filepath="E:\trunk\compileInject\compiler\compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/thirdLibs/fragmentation/fragmentation.iml" filepath="$PROJECT_DIR$/thirdLibs/fragmentation/fragmentation.iml" />
+      <module fileurl="file://E:\trunk\thirdLibs\fragmentation\fragmentation.iml" filepath="E:\trunk\thirdLibs\fragmentation\fragmentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-imagespickers/lib-imagespickers.iml" filepath="$PROJECT_DIR$/lib-imagespickers/lib-imagespickers.iml" />
+      <module fileurl="file://E:\trunk\lib-imagespickers\lib-imagespickers.iml" filepath="E:\trunk\lib-imagespickers\lib-imagespickers.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-zxing/lib-zxing.iml" filepath="$PROJECT_DIR$/lib-zxing/lib-zxing.iml" />
+      <module fileurl="file://E:\trunk\lib-zxing\lib-zxing.iml" filepath="E:\trunk\lib-zxing\lib-zxing.iml" />
       <module fileurl="file://$PROJECT_DIR$/model/model.iml" filepath="$PROJECT_DIR$/model/model.iml" />
+      <module fileurl="file://E:\trunk\model\model.iml" filepath="E:\trunk\model\model.iml" />
       <module fileurl="file://$PROJECT_DIR$/presenter/presenter.iml" filepath="$PROJECT_DIR$/presenter/presenter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/trunk.iml" filepath="$PROJECT_DIR$/trunk.iml" />
+      <module fileurl="file://E:\trunk\presenter\presenter.iml" filepath="E:\trunk\presenter\presenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/trunk.iml" filepath="$PROJECT_DIR$/.idea/trunk.iml" />
+      <module fileurl="file://E:\trunk\trunk.iml" filepath="E:\trunk\trunk.iml" />
     </modules>
   </component>
 </project>
