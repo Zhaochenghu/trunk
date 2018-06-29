@@ -67,7 +67,7 @@ public class StationDetailBean {
       if ("AC".equals(cpType.toUpperCase())) {
         return "7KW";
       } else {
-        return "30KW";
+        return "90KW";
       }
     }
 

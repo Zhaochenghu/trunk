@@ -84,7 +84,7 @@ public class OrderView extends FrameLayout {
   public void refreshData(final SubstationBean substationBean) {
 
     this.substationBean = substationBean;
-    tvName.setText(substationBean.name);
+    tvName.setText(substationBean.areaName);
     tvDistance.setText(substationBean.distance);
 
     tvAc.setVisibility(substationBean.hasTotalAC > 0 ? View.VISIBLE : View.GONE);

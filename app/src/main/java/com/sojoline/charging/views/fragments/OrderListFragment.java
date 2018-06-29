@@ -197,7 +197,7 @@ public class OrderListFragment extends LvBaseFragment {
 			favorCase = new FavorCase();
 		}
 		showLoadingDialog();
-		favorCase.params(bean.substationId)
+		favorCase.params(bean.areaId)
 				.createObservable(new SimpleSubscriber<SimpleResponse>() {
 					@Override
 					public void onError(Throwable e) {
@@ -232,7 +232,7 @@ public class OrderListFragment extends LvBaseFragment {
 			unFavorCase = new UnFavorCase();
 		}
 		showLoadingDialog();
-		unFavorCase.params(bean.substationId)
+		unFavorCase.params(bean.areaId)
 				.createObservable(new SimpleSubscriber<SimpleResponse>() {
 					@Override
 					public void onError(Throwable e) {
@@ -286,7 +286,7 @@ public class OrderListFragment extends LvBaseFragment {
 //      Log.i("TAG", "onBindViewHolder: " + substationBean.name + " " + substationBean.isFavorites);
 			//加载费用信息，费用信息是实时数据
 			ApiComponentHolder.sApiComponent.apiService()
-					.queryFees(substationBean.substationId)
+					.queryFees(substationBean.areaId)
 					.take(1)
 					.compose(SchedulersCompat.<FeeResponse>applyNewSchedulers())
 					.subscribe(new SimpleSubscriber<FeeResponse>() {
@@ -309,7 +309,7 @@ public class OrderListFragment extends LvBaseFragment {
 						}
 					});
 			//电站名
-			holder.colItemStation.setText(substationBean.name);
+			holder.colItemStation.setText(substationBean.areaName);
 			//这里设置是为了实现跑马灯效果
 			holder.colItemStation.setSelected(true);
 			//电站地址
@@ -350,7 +350,7 @@ public class OrderListFragment extends LvBaseFragment {
 					//这里应该是substationId，不能写id
 //          StationDetailActivity.navigation(substationBean.substationId, substationBean.name,
 //                  substationBean.getLat(), substationBean.getLng());
-					PileListActivity.navigation(substationBean.substationId, substationBean.name,
+					PileListActivity.navigation(substationBean.areaId, substationBean.areaName,
 							substationBean.getLat(), substationBean.getLng());
 				}
 			});
@@ -359,7 +359,7 @@ public class OrderListFragment extends LvBaseFragment {
 			holder.llFree.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					FeeActivity.navigation(substationBean.substationId, substationBean.name);
+					FeeActivity.navigation(substationBean.areaId, substationBean.areaName);
 				}
 			});
 

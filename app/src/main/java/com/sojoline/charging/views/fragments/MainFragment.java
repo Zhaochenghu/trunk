@@ -179,7 +179,7 @@ public class MainFragment extends LvBaseMainFragment implements MainContract.Vie
                 public void call(ShowChargingInfoEvent showChargingInfoEvent) {
                     if (showChargingInfoEvent.isShow) {
                         substationBean = showChargingInfoEvent.substationBean;
-                        feePresenter.queryFees(substationBean.substationId);
+                        feePresenter.queryFees(substationBean.areaId);
                         orderView.refreshData(substationBean);
                         orderView.show();
 //              mainPresenter.getSubstationSummary(substationBean.s_id);
@@ -246,10 +246,10 @@ public class MainFragment extends LvBaseMainFragment implements MainContract.Vie
         } else {
             if (orderView.isFavor()) { // 已收藏
                 showLoadingDialog();
-                mainPresenter.clearFavor(substationBean.substationId);
+                mainPresenter.clearFavor(substationBean.areaId);
             } else { //收藏电站
                 showLoadingDialog();
-                mainPresenter.saveFavor(substationBean.substationId);
+                mainPresenter.saveFavor(substationBean.areaId);
             }
         }
     }
@@ -261,7 +261,7 @@ public class MainFragment extends LvBaseMainFragment implements MainContract.Vie
     public void clickDetail() {
 //        StationDetailActivity.navigation(substationBean.substationId, substationBean.name,
 //            substationBean.getLat(), substationBean.getLng());
-        PileListActivity.navigation(substationBean.substationId, substationBean.name,
+        PileListActivity.navigation(substationBean.areaId, substationBean.areaName,
                 substationBean.getLat(), substationBean.getLng());
     }
 
@@ -271,7 +271,7 @@ public class MainFragment extends LvBaseMainFragment implements MainContract.Vie
     @OnClick(R.id.tv_service)
     public void feeDetail() {
         //跳转到FeeActivity
-        FeeActivity.navigation(substationBean.substationId, substationBean.name);
+        FeeActivity.navigation(substationBean.areaId, substationBean.areaName);
     }
 
     /**

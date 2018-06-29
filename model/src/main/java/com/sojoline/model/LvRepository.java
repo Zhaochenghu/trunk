@@ -18,110 +18,110 @@ import rx.functions.Func1;
  ********************************/
 public class LvRepository {
 
-  private static final LvRepository instance = new LvRepository();
+    private static final LvRepository instance = new LvRepository();
 
-  private volatile boolean isRequestSuccess;
-  private volatile boolean isSortedByDistance;
+    private volatile boolean isRequestSuccess;
+    private volatile boolean isSortedByDistance;
 
-  private List<SubstationBean> substations = Collections.emptyList();
+    private List<SubstationBean> substations = Collections.emptyList();
 
-  private StationFilterType filterType = StationFilterType.FILTER_ALL;
+    private StationFilterType filterType = StationFilterType.FILTER_ALL;
 
-  public static LvRepository getInstance() {
-    return instance;
-  }
-
-  private LvRepository() {
-  }
-
-  public boolean isRequestSuccess() {
-    return isRequestSuccess;
-  }
-
-  public Observable<SubstationBean> getSubstations() {
-    return
-        Observable.from(substations)
-            .filter(new Func1<SubstationBean, Boolean>() {
-              @Override
-              public Boolean call(SubstationBean substationBeen) {
-                return doFilter(substationBeen);
-              }
-            });
-  }
-
-  @NonNull
-  public Boolean doFilter(SubstationBean substationBeen) {
-    if (filterType == StationFilterType.FILTER_AC) {
-      return substationBeen.hasTotalAC > 0;
-    } else if (filterType == StationFilterType.FILTER_DC) {
-      return substationBeen.hasTotalDC > 0;
-    } else if (filterType == StationFilterType.FILTER_IDLE) {
-      return substationBeen.hasRest > 0;
+    public static LvRepository getInstance() {
+        return instance;
     }
-    return true;
-  }
 
-  public boolean isSortedByDistance() {
-    return isSortedByDistance;
-  }
+    private LvRepository() {
+    }
 
-  public void sortByDistanceEnd() {
-    isSortedByDistance = true;
-  }
+    public boolean isRequestSuccess() {
+        return isRequestSuccess;
+    }
 
-  public void refreshSubstations(List<SubstationBean> substations) {
-    isRequestSuccess = true;
-    isSortedByDistance = false;
-    this.substations = substations;
-  }
+    public Observable<SubstationBean> getSubstations() {
+        return
+                Observable.from(substations)
+                        .filter(new Func1<SubstationBean, Boolean>() {
+                            @Override
+                            public Boolean call(SubstationBean substationBeen) {
+                                return doFilter(substationBeen);
+                            }
+                        });
+    }
 
-  public Observable<List<SubstationBean>> filterWithName(final String searchName) {
-    return Observable.from(substations)
-        .filter(new Func1<SubstationBean, Boolean>() {
-          @Override
-          public Boolean call(SubstationBean substationBean) {
-            return substationBean.name.contains(searchName);
-          }
-        })
-        .toList()
-        .compose(SchedulersCompat.<List<SubstationBean>>applyNewSchedulers());
-  }
+    @NonNull
+    public Boolean doFilter(SubstationBean substationBeen) {
+        if (filterType == StationFilterType.FILTER_AC) {
+            return substationBeen.hasTotalAC > 0;
+        } else if (filterType == StationFilterType.FILTER_DC) {
+            return substationBeen.hasTotalDC > 0;
+        } else if (filterType == StationFilterType.FILTER_IDLE) {
+            return substationBeen.hasRest > 0;
+        }
+        return true;
+    }
 
-  public Observable<SubstationBean> filterFavorById(final String id){
-    return Observable.from(substations)
-            .filter(new Func1<SubstationBean, Boolean>() {
-              @Override
-              public Boolean call(SubstationBean substationBean) {
-                if (substationBean.substationId.equals(id)){
-                  return true;
-                }else {
-                  return false;
-                }
+    public boolean isSortedByDistance() {
+        return isSortedByDistance;
+    }
 
-              }
-            }).compose(SchedulersCompat.<SubstationBean>applyNewSchedulers());
-  }
+    public void sortByDistanceEnd() {
+        isSortedByDistance = true;
+    }
 
-  /**
-   * 过滤所有已经收藏的充电站
-   */
-  public Observable<List<SubstationBean>> filterFavorSatation() {
-    return Observable.from(substations)
-        .filter(new Func1<SubstationBean, Boolean>() {
-          @Override
-          public Boolean call(SubstationBean substationBean) {
-            return substationBean.isFavorites;
-          }
-        })
-        .toList()
-        .compose(SchedulersCompat.<List<SubstationBean>>applyNewSchedulers());
-  }
+    public void refreshSubstations(List<SubstationBean> substations) {
+        isRequestSuccess = true;
+        isSortedByDistance = false;
+        this.substations = substations;
+    }
 
-  public void setFilter(StationFilterType filter) {
-    this.filterType = filter;
-  }
+    public Observable<List<SubstationBean>> filterWithName(final String searchName) {
+        return Observable.from(substations)
+                .filter(new Func1<SubstationBean, Boolean>() {
+                    @Override
+                    public Boolean call(SubstationBean substationBean) {
+                        return substationBean.areaName.contains(searchName);
+                    }
+                })
+                .toList()
+                .compose(SchedulersCompat.<List<SubstationBean>>applyNewSchedulers());
+    }
 
-  public StationFilterType getFilterType() {
-    return filterType;
-  }
+    public Observable<SubstationBean> filterFavorById(final String id){
+        return Observable.from(substations)
+                .filter(new Func1<SubstationBean, Boolean>() {
+                    @Override
+                    public Boolean call(SubstationBean substationBean) {
+                        if (substationBean.areaId.equals(id)){
+                            return true;
+                        }else {
+                            return false;
+                        }
+
+                    }
+                }).compose(SchedulersCompat.<SubstationBean>applyNewSchedulers());
+    }
+
+    /**
+     * 过滤所有已经收藏的充电站
+     */
+    public Observable<List<SubstationBean>> filterFavorSatation() {
+        return Observable.from(substations)
+                .filter(new Func1<SubstationBean, Boolean>() {
+                    @Override
+                    public Boolean call(SubstationBean substationBean) {
+                        return substationBean.isFavorites;
+                    }
+                })
+                .toList()
+                .compose(SchedulersCompat.<List<SubstationBean>>applyNewSchedulers());
+    }
+
+    public void setFilter(StationFilterType filter) {
+        this.filterType = filter;
+    }
+
+    public StationFilterType getFilterType() {
+        return filterType;
+    }
 }

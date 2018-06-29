@@ -70,7 +70,7 @@ public interface ApiService {
     /**
      * 忘记密码
      */
-    @POST("/v1/account/password/forget")
+    @POST("v1/account/password/forget")
     Observable<SimpleResponse> forgotPwd(@Body ForgotPwdRequest request);
 
     /**
@@ -87,19 +87,26 @@ public interface ApiService {
     @POST("v1/nickname/update")
     Observable<SimpleResponse> updateNick(@Body HashMap<String,String> hashMap);
 
+
     /**
      * 充电站列表
      */
-    @GET("v1/substation/list")
+    //@GET("v1/substation/list")
+    //Observable<SubstationsResponse> getSubstation();
+    @GET("v1/area/list")
     Observable<SubstationsResponse> getSubstation();
+
 
     /**
      * 充电站概要信息
-     *
+     *areaId
+     * substation
      * @param stationId [substationId]
      */
-    @GET("v1/substation/summary")
-    Observable<StationDetailResponse> getSubstationSummary(@Query("substationId") String stationId);
+    // @GET("v1/substation/summary")
+    // Observable<StationDetailResponse> getSubstationSummary(@Query("substationId") String stationId);
+    @GET("v1/area/summary")
+    Observable<StationDetailResponse> getSubstationSummary(@Query("areaId") String stationId);
 
     /**
      * 预约
@@ -128,35 +135,44 @@ public interface ApiService {
 
     /**
      * 查看电价（费用模板）
-     *
+     *areaId
      * @param substationId
      * @return
      */
-    @GET("v1/fees")
-    Observable<FeeResponse> queryFees(@Query("substationId") String substationId);
+    // @GET("v1/fees")
+    // Observable<FeeResponse> queryFees(@Query("substationId") String substationId);
+    @GET("v1/fees/area")
+    Observable<FeeResponse> queryFees(@Query("areaId") String substationId);
 
     /**
      * 收藏充电站
      *
      * @param substationId [substationId]
      */
-    @GET("v1/favorite/substation")
-    Observable<SimpleResponse> favorSubstation(@Query("substationId") String substationId);
+    //  @GET("v1/favorite/substation")
+//    Observable<SimpleResponse> favorSubstation(@Query("substationId") String substationId);
+
+    @GET("v1/favorite/area")
+    Observable<SimpleResponse> favorSubstation(@Query("areaId") String substationId);
 
     /**
      * 取消收藏
      *
      * @param substationId [substationId]
      */
-    @GET("v1/unfavorite/substation")
-    Observable<SimpleResponse> unFavorSubstation(@Query("substationId") String substationId);
+    //  @GET("v1/unfavorite/substation")
+    //  Observable<SimpleResponse> unFavorSubstation(@Query("substationId") String substationId);
+    @GET("v1/unfavorite/area")
+    Observable<SimpleResponse> unFavorSubstation(@Query("areaId") String substationId);
 
     /**
      * 查看收藏
      *
      * @param request [page(default = 1), prePage(default = 20)]
      */
-    @GET("v1/my/substations")
+    //@GET("v1/my/substations")
+    //Observable<SubstationsResponse> getFavorList(@QueryMap HashMap<String, Object> request);
+    @GET("v1/my/areas")
     Observable<SubstationsResponse> getFavorList(@QueryMap HashMap<String, Object> request);
 
     /**
