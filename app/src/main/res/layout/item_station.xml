@@ -30,7 +30,7 @@
                 android:gravity="center"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:textColor="@color/secondary_text_black"
-                android:textSize="12sp"/>
+                android:textSize="12dp"/>
 
             <TextView
                 android:id="@+id/tv_dc"
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/secondary_text_black"
-                android:textSize="12sp"/>
+                android:textSize="12dp"/>
         </LinearLayout>
         <Space
             android:layout_width="0dp"
@@ -163,19 +163,19 @@
                     android:layout_marginTop="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
                 <TextView
                     android:id="@+id/tv_service_fee"
                     android:layout_marginTop="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
                 <TextView
                     android:id="@+id/tv_park_fee"
                     android:layout_marginTop="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             <!--<TextView-->
@@ -207,7 +207,7 @@
                     android:id="@+id/tv_pay_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
                 <LinearLayout
                     android:layout_marginTop="1dp"
                     android:layout_width="match_parent"
@@ -217,12 +217,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="运营商："
-                        android:textSize="12sp"/>
+                        android:textSize="12dp"/>
                     <TextView
                         android:id="@+id/tv_companyName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
+                        android:textSize="12dp"
                         android:ellipsize="marquee"
                         android:focusableInTouchMode="true"
                         android:marqueeRepeatLimit="marquee_forever"
@@ -233,7 +233,7 @@
                     android:layout_marginTop="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             <!--<TextView-->

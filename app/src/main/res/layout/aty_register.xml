@@ -57,6 +57,7 @@
             android:id="@+id/reg_bt_send"
             style="@style/Button_Send_Code"
             android:layout_weight="11"
+            android:textSize="@dimen/layout_verticaldistance12_worlduc_dp"
             android:text="@string/send_code"/>
     </LinearLayout>
 

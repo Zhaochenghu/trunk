@@ -25,6 +25,7 @@
             android:maxLines="1"
             android:maxLength="25"
             android:hint="输入充电桩的编号"
+            android:textSize="@dimen/layout_bothdistance15_worlduc_dp"
             android:layout_marginLeft="10dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"/>
@@ -44,7 +45,8 @@
             android:textSize="@dimen/ts_lel_two"/>
         <EditText
             android:id="@+id/et_gun"
-            android:hint="例如：枪1输入“ 1”"
+            android:hint="例如：枪0输入“ 0”"
+            android:textSize="@dimen/layout_bothdistance15_worlduc_dp"
             android:layout_width="match_parent"
             android:inputType="number"
             android:layout_height="40dp"

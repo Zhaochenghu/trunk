@@ -133,6 +133,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_flow_selector"
                         android:text=" 枪1 "
+                        android:textSize="@dimen/layout_verticaldistance12_worlduc_dp"
                         android:drawablePadding="1dp"
                         android:drawableLeft="@drawable/state_working"/>
                     <TextView
@@ -146,6 +147,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_flow_selector"
                         android:text=" 枪2 "
+                        android:textSize="@dimen/layout_verticaldistance12_worlduc_dp"
                         android:drawablePadding="1dp"
                         android:drawableLeft="@drawable/state_working"/>
                 </LinearLayout>
