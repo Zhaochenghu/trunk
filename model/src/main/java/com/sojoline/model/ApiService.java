@@ -94,7 +94,8 @@ public interface ApiService {
     //@GET("v1/substation/list")
     //Observable<SubstationsResponse> getSubstation();
     @GET("v1/area/list")
-    Observable<SubstationsResponse> getSubstation();
+    Observable<SubstationsResponse> getSubstation(@QueryMap HashMap<String, Object> request);
+    // Observable<SubstationsResponse> getSubstation();
 
 
     /**

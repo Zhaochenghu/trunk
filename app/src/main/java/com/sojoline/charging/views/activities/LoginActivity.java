@@ -25,6 +25,8 @@ import com.sojoline.model.storage.AppInfosPreferences;
 import com.sojoline.presenter.login.LoginContract;
 import com.sojoline.presenter.login.LoginPresenter;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -55,6 +57,7 @@ public class LoginActivity extends LvBaseAppCompatActivity implements LoginContr
 
     private ValidationUtils validate;
     private LoginPresenter  presenter;
+    private HashMap<String, Object> request;
     private boolean isPrompt;
 
     public static void navigation(boolean isPrompt) {
@@ -136,7 +139,7 @@ public class LoginActivity extends LvBaseAppCompatActivity implements LoginContr
                     showToast("密码不能包含汉字");
                     return;
                 }else {
-                    LoginRequest request = new LoginRequest(phone, pwd);
+                    LoginRequest request = new LoginRequest(phone, pwd,"0001");
                     presenter.hpLogin(request);
                 }
                 break;
@@ -192,9 +195,11 @@ public class LoginActivity extends LvBaseAppCompatActivity implements LoginContr
      * 重新获取充电站数据
      */
     private void getSubstations() {
+        request = new HashMap<>();
+        request.put("companyCode", "0001");
         ApiComponentHolder.sApiComponent
             .apiService()
-            .getSubstation()
+            .getSubstation(request)
             .compose(SchedulersCompat.<SubstationsResponse>applyNewSchedulers())
             .doOnNext(new Action1<SubstationsResponse>() {
                 @Override
