@@ -8,10 +8,12 @@ public class RegisterRequest {
     public String username;
     public String password;
     public String captcha;
+    public String companyCode;
 
-    public RegisterRequest(String username, String password, String captcha) {
+    public RegisterRequest(String username, String password, String captcha,String companyCode) {
         this.username = username;
         this.password = password;
         this.captcha = captcha;
+        this.companyCode=companyCode;
     }
 }

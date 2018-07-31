@@ -6,6 +6,7 @@ package com.sojoline.model.request;
 public class StartChargingRequest extends SimpleRequest {
 
   public String substationId;
+  public String areaId;
   public String cpId;
   public String cpinterfaceId;
   public String chargingMode;

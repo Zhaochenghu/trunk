@@ -190,7 +190,7 @@ public class StationInfoActivity extends LvBaseAppCompatActivity implements Stat
     @OnClick(R.id.ll_free)
     public void clickFee() {
         if (mStationInfoBean != null) {
-            FeeActivity.navigation(mStationInfoBean.substationId, mStationInfoBean.substationName);
+            FeeActivity.navigation(mStationInfoBean.areaId, mStationInfoBean.areaName);
         }
 
     }
@@ -241,7 +241,7 @@ public class StationInfoActivity extends LvBaseAppCompatActivity implements Stat
     public void startChargingSuccess() {
         ServiceUtil.startChargingQuery();
         AppInfosPreferences.get().setCharging("1");
-        AppInfosPreferences.get().setChargeStationName(mStationInfoBean.substationName);
+        AppInfosPreferences.get().setChargeStationName(mStationInfoBean.areaName);
         RxBus.getInstance().postEvent(new FinishActivityEvent());
         finish();
     }
@@ -252,8 +252,8 @@ public class StationInfoActivity extends LvBaseAppCompatActivity implements Stat
     }
 
     private void refreshDisplay() {
-        feePresenter.queryFees(mStationInfoBean.substationId);
-        subName.setText(mStationInfoBean.substationName);
+        feePresenter.queryFees(mStationInfoBean.areaId);
+        subName.setText(mStationInfoBean.areaName);
         pileCode.setText(mStationInfoBean.cpId);
         pileType.setText(mStationInfoBean.getCpType());
         tvPower.setText(mStationInfoBean.ratedPower);
@@ -354,7 +354,7 @@ public class StationInfoActivity extends LvBaseAppCompatActivity implements Stat
 
         request.chargingMode = "0" + currentMode;
         request.command = "0";
-        request.substationId = this.mStationInfoBean.substationId;
+        request.areaId = this.mStationInfoBean.areaId;
         request.cpId = this.mStationInfoBean.cpId;
         request.cpinterfaceId = gunId;
         presenter.startCharging(request);
