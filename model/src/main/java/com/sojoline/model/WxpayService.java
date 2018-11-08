@@ -2,6 +2,7 @@ package com.sojoline.model;
 
 import com.sojoline.model.request.WxOrderQueryRequest;
 import com.sojoline.model.request.WxOrderRequest;
+import com.sojoline.model.response.AliOrderResponse;
 import com.sojoline.model.response.WxOrderQueryResponse;
 import com.sojoline.model.response.WxOrderResponse;
 
@@ -14,9 +15,15 @@ import rx.Observable;
  ********************************/
 public interface WxpayService {
 
-    @POST("pay/unifiedprder/cs0001")
+    @POST("wx/pay/unifiedprder/cs0001")
     Observable<WxOrderResponse> placeAnOrder(@Body WxOrderRequest request);
 
-    @POST("pay/orderquery/cs0001")
+    @POST("wx/pay/orderquery/cs0001")
     Observable<WxOrderQueryResponse> queryOrder(@Body WxOrderQueryRequest request);
+
+    @POST("wx/alipay/unifiedprder/cs0001")
+    Observable<AliOrderResponse> placeAnOrderAlipay(@Body WxOrderRequest request);
+
+    @POST("cs/v1/app/alipay/confirm")
+    Observable<WxOrderQueryResponse> queryOrderAlipay(@Body WxOrderQueryRequest request);
 }

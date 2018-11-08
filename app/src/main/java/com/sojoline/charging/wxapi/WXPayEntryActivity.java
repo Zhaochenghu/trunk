@@ -1,23 +1,37 @@
 package com.sojoline.charging.wxapi;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alipay.sdk.app.PayTask;
 import com.sojoline.charging.LvAppConstants;
 import com.sojoline.charging.R;
+import com.sojoline.charging.alipay.PayResult;
+import com.sojoline.charging.utils.IntentUtils;
 import com.sojoline.charging.views.base.LvBaseAppCompatActivity;
 import com.sojoline.model.dagger.ApiComponentHolder;
 import com.sojoline.model.request.WxOrderQueryRequest;
 import com.sojoline.model.request.WxOrderRequest;
+import com.sojoline.model.response.AliOrderResponse;
 import com.sojoline.model.response.WalletInfoResponse;
 import com.sojoline.model.response.WxOrderQueryResponse;
 import com.sojoline.model.response.WxOrderResponse;
@@ -33,6 +47,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.trello.rxlifecycle.ActivityEvent;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -45,9 +60,12 @@ import cn.com.leanvision.baseframe.util.LvCommonUtil;
 import cn.com.leanvision.baseframe.util.LvTextUtil;
 import rx.Observable;
 import rx.Subscriber;
-
+/********************************
+ * Created by zhaochenghu on 2018/09/11.
+ ********************************/
 @Route(path = "/money/recharge")
-public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAPIEventHandler {
+public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAPIEventHandler ,
+        ActivityCompat.OnRequestPermissionsResultCallback{
 
     @BindViews({R.id.bt_money1, R.id.bt_money2, R.id.bt_money3})
     List<Button> btnMoneies;
@@ -61,9 +79,11 @@ public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAP
     TextView     tvAliPay;
     @BindView(R.id.et_money)
     EditText     etMoney;
-
+    static int PAYWAY;
     private int selectedMoney = 0; // 默认充值20元
     private IWXAPI api;
+    private static final int SDK_PAY_FLAG = 1;
+    public final static int REQUEST_READ_PHONE_STATE = 1;
 
     public static void navigation() {
         ARouter.getInstance().build("/money/recharge").navigation();
@@ -72,8 +92,51 @@ public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAP
     @Override
     protected void setContentView(Bundle savedInstanceState) {
         setContentView(R.layout.pay_card);
+//        支付宝沙盒测试
+//        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+//        检查是否获取了联系人权限
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
+        } else {
+            //TODO
+        }
+        PAYWAY = 1;
+    }
+//    重新onRequestPermissionsResult方法调用联系人
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_PHONE_STATE:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    //TODO
+                }else {
+                    showPermissionDialog();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
+    public void showPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("支付宝需要获取您的联系人权限，否则无法正常支付")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        IntentUtils.turnToAppDetail(WXPayEntryActivity.this);
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -174,10 +237,12 @@ public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAP
             case R.id.tv_wechat:
                 tvWeChat.setCompoundDrawables(null, null, icon, null);
                 tvAliPay.setCompoundDrawables(null, null, null, null);
+                PAYWAY=1;
                 break;
             case R.id.tv_alipay:
                 tvWeChat.setCompoundDrawables(null, null, null, null);
                 tvAliPay.setCompoundDrawables(null, null, icon, null);
+                PAYWAY=2;
                 break;
         }
     }
@@ -185,35 +250,145 @@ public class WXPayEntryActivity extends LvBaseAppCompatActivity implements IWXAP
     public String tradeNo = "";
 
     public void placeAnOrder() {
+        if(PAYWAY==1){
+            Wxpay();
+        }else {
+            payV2();
+        }
+    }
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            showLoadingDialog("正在检查支付结果");
+            //两秒延迟为了等待支付宝给后台发送消息
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+//                    showLoadingDialog("正在检查支付结果");
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    WxOrderQueryRequest request = new WxOrderQueryRequest();
+                        request.result = resultInfo;
+                        ApiComponentHolder.sApiComponent
+                                .wxpayService()
+                                .queryOrderAlipay(request)
+                                .take(1)
+                                .compose(SchedulersCompat.<WxOrderQueryResponse>applyNewSchedulers())
+                                .subscribe(new SimpleSubscriber<WxOrderQueryResponse>() {
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                        dismissLoadingDialog();
+                                    }
+                                    @Override
+                                    public void onNext(WxOrderQueryResponse wxOrderQueryResponse) {
+                                        dismissLoadingDialog();
+                                        if (wxOrderQueryResponse.pay.result == 1) {
+                                            Toast.makeText(WXPayEntryActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                                            WXPayEntryActivity.this.finish();
+                                        } else  {
+                                            Toast.makeText(WXPayEntryActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                }
+                break;
+            }
+        }
+    };
+
+    //支付宝支付
+    private void payV2() {
         showLoadingDialog();
         WxOrderRequest request = new WxOrderRequest();
         request.token = AppInfosPreferences.get().getToken();
-        request.body = String.format("充值%.00f元", rechargeMoney / 100.0f);
+        request.body = String.format("deposit%.00f yuan", rechargeMoney / 100.0f);
         request.spbill_create_ip = "192.168.0.112";
         request.total_fee = String.format("%.00f", rechargeMoney); // 充值是按照'角'来
         request.trade_type = "APP";
 
         ApiComponentHolder.sApiComponent
-            .wxpayService()
-            .placeAnOrder(request)
-            .take(1)
-            .compose(SchedulersCompat.<WxOrderResponse>applyNewSchedulers())
-            .subscribe(new SimpleSubscriber<WxOrderResponse>() {
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                    dismissLoadingDialog();
-                }
-
-                @Override
-                public void onNext(WxOrderResponse wxOrderResponse) {
-                    dismissLoadingDialog();
-                    if (wxOrderResponse.isSuccess()) {
-                        tradeNo = wxOrderResponse.out_trade_no;
-                        performWxLocalPay(wxOrderResponse);
+                .wxpayService()
+                .placeAnOrderAlipay(request)
+                .take(1)
+                .compose(SchedulersCompat.<AliOrderResponse>applyNewSchedulers())
+                .subscribe(new SimpleSubscriber<AliOrderResponse>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        dismissLoadingDialog();
                     }
-                }
-            });
+
+                    @Override
+                    public void onNext(AliOrderResponse aliOrderResponse) {
+                        dismissLoadingDialog();
+                        final String orderstring = aliOrderResponse.order_string;
+                        Runnable payRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                PayTask alipay = new PayTask(WXPayEntryActivity.this);
+                                Map<String, String> result = alipay.payV2(orderstring, true);
+                                Log.i("msp", result.toString());
+
+                                Message msg = new Message();
+                                msg.what = SDK_PAY_FLAG;
+                                msg.obj = result;
+                                mHandler.sendMessage(msg);
+                            }
+                        };
+                        Thread payThread = new Thread(payRunnable);
+                        if(serverPay()){
+                            payThread.start();
+                        }else{
+                            Toast.makeText(WXPayEntryActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                });
+    }
+
+    private boolean serverPay() { return true; }
+    //微信支付
+    private void Wxpay() {
+        showLoadingDialog();
+        WxOrderRequest request = new WxOrderRequest();
+        request.token = AppInfosPreferences.get().getToken();
+        request.body = String.format("充值%.00f 元", rechargeMoney / 100.0f);
+        request.spbill_create_ip = "192.168.0.112";
+        request.total_fee = String.format("%.00f", rechargeMoney); // 充值是按照'角'来
+        request.trade_type = "APP";
+
+        ApiComponentHolder.sApiComponent
+                .wxpayService()
+                .placeAnOrder(request)
+                .take(1)
+                .compose(SchedulersCompat.<WxOrderResponse>applyNewSchedulers())
+                .subscribe(new SimpleSubscriber<WxOrderResponse>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onNext(WxOrderResponse wxOrderResponse) {
+                        dismissLoadingDialog();
+                        if (wxOrderResponse.isSuccess()) {
+                            tradeNo = wxOrderResponse.out_trade_no;
+                            performWxLocalPay(wxOrderResponse);
+                        }
+                    }
+                });
     }
 
     private void performWxLocalPay(WxOrderResponse wxOrderResponse) {
