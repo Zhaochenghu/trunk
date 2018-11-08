@@ -147,7 +147,7 @@ public class LvAppUtils {
         //app 存放路径
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/sojo";
         Map<String, String> params = new HashMap<>();
-        params.put("appType", "cp");
+        params.put("appType", "sojo");
         new UpdateAppManager
                 .Builder()
                 .setActivity(activity)
