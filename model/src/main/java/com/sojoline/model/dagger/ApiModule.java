@@ -44,11 +44,11 @@ public class ApiModule {
     public static final String UPDATE_URL = "http://117.78.40.137/cs/v1/app/version/update";
     //服务器
     private static final String USER_API_SERVER = "117.78.40.137/cs";
-    private static final String PAY_API_SERVER = "117.78.40.137/wx";
+    private static final String PAY_API_SERVER = "117.78.40.137";
 
     //test服务器
-//    String USER_API_SERVER = "117.78.40.137/cs-demo";
-//    String PAY_API_SERVER = "117.78.40.137/wexin-demo";
+//    private static final String USER_API_SERVER = "117.78.26.237/cs";
+//    private static final String PAY_API_SERVER = "117.78.26.237";
 
     private static final String USER_API_PORT = "";
     // http 缓存数据路径

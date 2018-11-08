@@ -11,8 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/lib-zxing/lib-zxing.iml" filepath="$PROJECT_DIR$/lib-zxing/lib-zxing.iml" />
       <module fileurl="file://$PROJECT_DIR$/model/model.iml" filepath="$PROJECT_DIR$/model/model.iml" />
       <module fileurl="file://$PROJECT_DIR$/presenter/presenter.iml" filepath="$PROJECT_DIR$/presenter/presenter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/trunk.iml" filepath="$PROJECT_DIR$/.idea/trunk.iml" />
-      <module fileurl="file://E:\trunk\trunk.iml" filepath="E:\trunk\trunk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/trunk.iml" filepath="$PROJECT_DIR$/trunk.iml" />
     </modules>
   </component>
 </project>

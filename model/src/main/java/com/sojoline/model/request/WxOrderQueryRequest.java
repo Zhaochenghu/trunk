@@ -6,4 +6,5 @@ package com.sojoline.model.request;
 public class WxOrderQueryRequest {
     
     public String out_trade_no;
+    public String result;
 }
