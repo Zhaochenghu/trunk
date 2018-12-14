@@ -26,6 +26,13 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.2.1"
+
+        //使用模拟器报错“Installation failed with message INSTALL_FAILED_NO_MATCHING_ABIS”解决
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // annotationProcessor 传参 for arouter
         javaCompileOptions {
@@ -34,6 +41,15 @@ android {
             }
         }
         multiDexEnabled true
+    }
+    //使用模拟器报错“Installation failed with message INSTALL_FAILED_NO_MATCHING_ABIS”解决
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'x86', 'armeabi-v7a','x86_64', 'arm64-v8a'
+            universalApk true
+        }
     }
 
     signingConfigs {
