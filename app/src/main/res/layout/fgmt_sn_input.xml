@@ -45,7 +45,7 @@
             android:textSize="@dimen/ts_lel_two"/>
         <EditText
             android:id="@+id/et_gun"
-            android:hint="例如：枪0输入“ 0”"
+            android:hint="例:“枪1”输入“1”"
             android:textSize="@dimen/layout_bothdistance15_worlduc_dp"
             android:layout_width="match_parent"
             android:inputType="number"

@@ -88,9 +88,10 @@ public class SnInputFragment extends LvBaseFragment implements StationInfoContra
   @OnTextChanged(value = {R.id.et_pile, R.id.et_gun}, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
   public void snChanged() {
     if (!LvTextUtil.isEmpty(etPile.getText().toString()) && !LvTextUtil.isEmpty(etGun.getText().toString())){
+        int gun= Integer.parseInt(etGun.getText().toString())-1;
       btnConfirm.setEnabled(true);
       //逗号是英文状态
-      strSn = "0001,0000,0000," + etPile.getText().toString().trim() + "," + etGun.getText().toString().trim();
+      strSn = "0001,0000,0000," + etPile.getText().toString().trim() + "," + gun;
     }
   }
 
