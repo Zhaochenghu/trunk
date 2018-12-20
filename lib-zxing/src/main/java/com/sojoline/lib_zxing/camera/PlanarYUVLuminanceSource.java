@@ -38,7 +38,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
     private final int top;
 
     public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
-                                    int width, int height) {
+                                    int width, int height, boolean b) {
         super(width, height);
 
         if (left + width > dataWidth || top + height > dataHeight) {
