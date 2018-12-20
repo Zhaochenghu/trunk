@@ -45,53 +45,79 @@ class ImageUtil {
         return new File(destinationPath);
     }
 
-    static Bitmap decodeSampledBitmapFromFile(File imageFile, int reqWidth, int reqHeight) throws IOException {
+//    static Bitmap decodeSampledBitmapFromFile(File imageFile, int reqWidth, int reqHeight) throws IOException {
+//        // First decode with inJustDecodeBounds=true to check dimensions
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+//
+//        // Calculate inSampleSize
+//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+//
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        Bitmap scaledBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+//
+//        if (scaledBitmap == null) {
+//            InputStream stream = null;
+//            try {
+//                stream = new FileInputStream(imageFile.getAbsoluteFile());
+//                scaledBitmap = BitmapFactory.decodeStream(stream, null, options);
+//            }catch (Exception e){
+//                Log.e("BitmapFactory", "Unable to decode stream: " + e);
+//            }finally {
+//                if (stream != null) {
+//                    try {
+//                        stream.close();
+//                    } catch (IOException e) {
+//                        // do nothing here
+//                    }
+//                }
+//            }
+//        }
+//
+//        //check the rotation of the image and display it properly
+//        ExifInterface exif;
+//        exif = new ExifInterface(imageFile.getAbsolutePath());
+//        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+//        Matrix matrix = new Matrix();
+//        if (orientation == 6) {
+//            matrix.postRotate(90);
+//        } else if (orientation == 3) {
+//            matrix.postRotate(180);
+//        } else if (orientation == 8) {
+//            matrix.postRotate(270);
+//        }
+//        scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+//        return scaledBitmap;
+//    }
+    /**
+     * 将图片根据压缩比压缩成固定宽高的Bitmap，实际解析的图片大小可能和#reqWidth、#reqHeight不一样。
+     *
+     * @param imageFile 图片地址
+     * @param reqWidth 需要压缩到的宽度
+     * @param reqHeight 需要压缩到的高度
+     * @return Bitmap
+     */
+    public static Bitmap decodeSampledBitmapFromFile(File imageFile, int reqWidth, int reqHeight) {
         // First decode with inJustDecodeBounds=true to check dimensions
-        BitmapFactory.Options options = new BitmapFactory.Options();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-
+        BitmapFactory.decodeFile(String.valueOf(imageFile), options);
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        Bitmap scaledBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-
-        if (scaledBitmap == null) {
-            InputStream stream = null;
-            try {
-                stream = new FileInputStream(imageFile.getAbsoluteFile());
-                scaledBitmap = BitmapFactory.decodeStream(stream, null, options);
-            }catch (Exception e){
-                Log.e("BitmapFactory", "Unable to decode stream: " + e);
-            }finally {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        // do nothing here
-                    }
-                }
-            }
-        }
-
-        //check the rotation of the image and display it properly
-        ExifInterface exif;
-        exif = new ExifInterface(imageFile.getAbsolutePath());
-        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
-        Matrix matrix = new Matrix();
-        if (orientation == 6) {
-            matrix.postRotate(90);
-        } else if (orientation == 3) {
-            matrix.postRotate(180);
-        } else if (orientation == 8) {
-            matrix.postRotate(270);
-        }
-        scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-        return scaledBitmap;
+        return BitmapFactory.decodeFile(String.valueOf(imageFile), options);
     }
-
+    /**
+     * 根据给定的宽度和高度动态计算图片压缩比率
+     *
+     * @param options Bitmap配置文件
+     * @param reqWidth 需要压缩到的宽度
+     * @param reqHeight 需要压缩到的高度
+     * @return 压缩比
+     */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;

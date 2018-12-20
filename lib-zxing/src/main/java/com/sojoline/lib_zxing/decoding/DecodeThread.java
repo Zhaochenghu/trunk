@@ -52,18 +52,18 @@ final class DecodeThread extends Thread {
 
     if (decodeFormats == null || decodeFormats.isEmpty()) {
       decodeFormats = new Vector<>();
-      decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
+//      decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
       decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-      decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
+//      decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
     }
 
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
-    if (characterSet != null) {
-      hints.put(DecodeHintType.CHARACTER_SET, characterSet);
-    }
-
-    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
+//    hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+//
+//    if (characterSet != null) {
+//      hints.put(DecodeHintType.CHARACTER_SET, characterSet);
+//    }
+//
+//    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
   }
 
   Handler getHandler() {
